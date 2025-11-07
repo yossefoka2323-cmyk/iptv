@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Download IPTV File</title>
+</head>
+<body>
+  <p>Preparing your download... please wait.</p>
+
+<script>
+(async () => {
+  try {
+    // رابط الملف الأصلي بصيغة m3u من GitHub
+    const fileUrl = "https://cdn.jsdelivr.net/gh/yossefoka2323-cmyk/iptv@main/iptv.m3u";
+
+    const resp = await fetch(fileUrl);
+    if (!resp.ok) throw new Error("Failed to fetch file: " + resp.status);
+
+    const blob = await resp.blob();
+    const filename = "joo2026.m3u"; // اسم الملف اللي هيتحمل على الشاشة
+
+    // إنشاء رابط تحميل مؤقت
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+
+    // تنظيف بعد التحميل
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+      a.remove();
+    }, 2000);
+
+  } catch (err) {
+    document.body.insertAdjacentHTML("beforeend", "<p style='color:red'>Error: " + err.message + "</p>");
+  }
+})();
+</script>
+</body>
+</html>
